@@ -1,0 +1,56 @@
+/// <reference path="api.d.ts" />
+
+/* tslint:disable:no-unused-variable member-ordering */
+
+module API.Client {
+    'use strict';
+
+    export class {{className}} {
+        protected basePath = "{{&domain}}";
+        public defaultHeaders: any = {}; // generate from global headers?
+
+        public static $inject = ["$http", "$httpParamSerializer"];
+
+        constructor(protected $http: ng.IHttpService,
+                    protected $httpParamSerializer?: (d: any) => any,
+                    basePath?: string)
+        {
+            if (basePath) {
+                this.basePath = basePath;
+            }
+        }
+
+        private extendObj<T1,T2>(objA: T1, objB: T2) {
+            for(let key in objB){
+                if(objB.hasOwnProperty(key)){
+                    objA[key] = objB[key];
+                }
+            }
+            return <T1&T2>objA;
+        }
+
+        {{ #methods }}
+
+        {{#summary}}/*{{&summary}}*/{{/summary}}
+        public {{ methodName }} ({{#parameters}}{{name}}:type, {{/parameters}}extraHttpRequestParams?: any): ng.IHttpPromise<{{ &response.resolveType }}> => {
+
+            // Fill this out with q params
+            let queryParams: any {};
+            let headerParams: any = this.extendObj({}, this.defaultHeaders);
+
+            let httpRequestParams: any = {
+                params: queryParams,
+                headers: headerParams
+            };
+
+            if (extraHttpRequestParams) {
+                httpRequestParams = this.extendObj(httpRequestParams, extraHttpRequestParams);
+            }
+
+            return this.$http(httpRequestParams);
+        }
+
+        {{ /methods }}
+
+    }
+}

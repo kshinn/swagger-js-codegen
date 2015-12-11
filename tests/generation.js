@@ -4,6 +4,7 @@ var assert = require('assert');
 var vows = require('vows');
 var fs = require('fs');
 var ffs = require('final-fs');
+var _ = require('lodash');
 
 var CodeGen = require('../lib/codegen').CodeGen;
 
@@ -43,6 +44,19 @@ list.forEach(function(file){
             }
         });
         assert(typeof(result), 'string');
+        result = CodeGen.getAngularTsCode({
+            moduleName: 'Test',
+            className: 'Test',
+            swagger: swagger,
+            lint: false,
+            beautify: false
+        });
+        _.forEach(result, function(code) {
+            console.log(code);
+        });
+
+        assert(typeof(result), 'object');
+
     };
 });
 vows.describe('Test Generation').addBatch(batch).export(module);

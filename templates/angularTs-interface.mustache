@@ -1,0 +1,13 @@
+/// <reference path="api.d.ts" />
+
+module API.Client {
+    export interface {{name}} {
+        {{#properties}}
+            {{#description}}/**
+            {{&description}}
+            **/{{/description}}
+            {{name}}: {{resolveType}};
+
+        {{/properties}}
+    }
+}
